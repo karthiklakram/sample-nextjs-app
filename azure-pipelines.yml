@@ -1,0 +1,28 @@
+trigger:
+  branches:
+    include:
+      - dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# Install Node.js
+- task: UseNode@2
+  inputs:
+    versionSpec: '20.x'
+
+# Install Dependencies
+- script: npm install
+  displayName: 'Install Dependencies'
+
+# Build Next.js App
+- script: npm run build
+  displayName: 'Build Next.js App'
+
+# Deploy to Azure App Service (optional)
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'my-azure-connection'
+    appName: 'sample-nextjs-app'
+    packageForLinux: '.next'
